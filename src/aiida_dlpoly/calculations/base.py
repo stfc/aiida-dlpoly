@@ -112,6 +112,11 @@ class DLPOLYCalculation(CalcJob):
             "ERROR_STATIS_NOT_FOUND",
             message="Error accessing the DL_POLY statistics file.",
         )
+        spec.exit_code(
+            303,
+            "ERROR_REVCON_NOT_FOUND",
+            message="Unable to find the expected REVCON file.",
+        )
 
     def prepare_for_submission(self, folder: Folder) -> CalcInfo:
         """
@@ -141,7 +146,7 @@ class DLPOLYCalculation(CalcJob):
         calc_info.codes_info = [
             code_info,
         ]
-        calc_info.retrieve_temporary_list = ["STATIS", "REVCON"]
+        calc_info.retrieve_temporary_list = ["STATIS", "REVCON", "RDFDAT", "MSDDAT"]
         calc_info.provenance_exclude_list = []
         calc_info.retrieve_list = ["OUTPUT"]
 
