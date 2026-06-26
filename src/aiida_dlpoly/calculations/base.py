@@ -1,9 +1,12 @@
 """Core DL_POLY simulation calculation module."""
 
+from tempfile import NamedTemporaryFile
+
 from aiida.common import CalcInfo, CodeInfo
 from aiida.common.folders import Folder
 from aiida.engine import CalcJob, CalcJobProcessSpec
 from aiida.orm import ArrayData, Dict, SinglefileData, StructureData
+from dlpoly.new_control import NewControl
 
 
 class DLPOLYCalculation(CalcJob):
@@ -74,7 +77,7 @@ class DLPOLYCalculation(CalcJob):
         spec.exit_code(
             300,
             "ERROR_OUTPUT_NOT_FOUND",
-            message="Error accessing the DL_POLY output files.",
+            message="Error accessing the main DL_POLY output file.",
         )
         spec.exit_code(
             301,
@@ -83,6 +86,11 @@ class DLPOLYCalculation(CalcJob):
                 "DL_POLY raised an error during execution. See the 'OUTPUT' file "
                 "for more information"
             ),
+        )
+        spec.exit_code(
+            302,
+            "ERROR_STATIS_NOT_FOUND",
+            message="Error accessing the DL_POLY statistics file.",
         )
 
     def prepare_for_submission(self, folder: Folder) -> CalcInfo:
@@ -106,6 +114,8 @@ class DLPOLYCalculation(CalcJob):
             code_info.cmdline_params = ["-c", self.inputs.control.filename]
         else:
             code_info.cmdline_params = ["-c", "CONTROL"]
+            with folder.open("CONTROL", "w") as f:
+                f.write(self.write_control_file())
 
         calc_info = CalcInfo()
         calc_info.codes_info = [
@@ -152,8 +162,11 @@ class DLPOLYCalculation(CalcJob):
 
     def write_control_file(self) -> str:
         """Write a formatted CONTROL file from an input dictionary."""
-        # control_str = ""
-        return ""
+        control = NewControl.from_dict(self.inputs.control.get_dict())
+        with NamedTemporaryFile(mode="w+", delete=True, suffix="") as tmp:
+            control.write(tmp.name)
+            tmp.seek(0)
+            return tmp.read()
         # return control_str
 
     def write_config_file(self) -> str:

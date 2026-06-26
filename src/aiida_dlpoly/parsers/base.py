@@ -35,9 +35,9 @@ class DLPOLYParser(Parser):
 
         statis_path = os.path.join(retrieved_tmp_path, "STATIS")
         if os.path.exists(statis_path):
-            self.parse_statis(os.path.join(retrieved_tmp_path, "STATIS"))
+            self.parse_statis(statis_path)
         else:
-            return self.exit_codes.ERROR_OUTPUT_NOT_FOUND
+            return self.exit_codes.ERROR_STATIS_NOT_FOUND
 
         return ExitCode(0)
 
@@ -61,7 +61,6 @@ class DLPOLYParser(Parser):
                 label = label.replace("Β", "beta")
             elif "Γ" in label:
                 label = label.replace("Γ", "gamma")
-            print(label.replace(" ", "_"), statis.data[:, i].size)
             array.set_array(
                 label.replace(" ", "_").replace("-", "_"), statis.data[:, i]
             )
