@@ -1,0 +1,21 @@
+title Argon System, stress autocorrelation
+
+io_statis_yaml on
+
+temperature  85.0 K
+initial_minimum_separation  0.0 ang
+coul_method OFF
+print_frequency  1000 steps
+stats_frequency  1000 steps
+stack_size 5000 steps
+
+padding  0.2 ang
+cutoff  7.5 ang
+ensemble nve
+time_run  50000 steps
+time_equilibration  0 steps
+time_job  3000.0 s
+time_close  100.0 s
+timestep  0.001 ps
+rescale_frequency  5 steps
+
