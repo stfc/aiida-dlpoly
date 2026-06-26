@@ -3,7 +3,7 @@
 from aiida.common import CalcInfo, CodeInfo
 from aiida.common.folders import Folder
 from aiida.engine import CalcJob, CalcJobProcessSpec
-from aiida.orm import Dict, SinglefileData, StructureData
+from aiida.orm import ArrayData, Dict, SinglefileData, StructureData
 
 
 class DLPOLYCalculation(CalcJob):
@@ -56,6 +56,12 @@ class DLPOLYCalculation(CalcJob):
             required=True,
             help="The main DL_POLY 'OUTPUT' file.",
         )
+        spec.output(
+            "statistics",
+            valid_type=ArrayData,
+            required=True,
+            help="Statistics collected throughout the simulation.",
+        )
 
         ## Metadata
         spec.inputs["metadata"]["options"]["resources"].default = {
@@ -68,7 +74,7 @@ class DLPOLYCalculation(CalcJob):
         spec.exit_code(
             300,
             "ERROR_OUTPUT_NOT_FOUND",
-            message="Error accessing the DL_POLY `OUTPUT` file.",
+            message="Error accessing the DL_POLY output files.",
         )
         spec.exit_code(
             301,
@@ -105,7 +111,7 @@ class DLPOLYCalculation(CalcJob):
         calc_info.codes_info = [
             code_info,
         ]
-        calc_info.retrieve_temporary_list = []
+        calc_info.retrieve_temporary_list = ["STATIS"]
         calc_info.provenance_exclude_list = []
         calc_info.retrieve_list = ["OUTPUT"]
 
