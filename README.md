@@ -7,7 +7,7 @@
 
 [![DOI]()]()
 
-# aiida-chemshell
+# aiida-dlpoly
 
 An [AiiDA](https://www.aiida.net) plugin for the [DL_POLY](https://ccp5.gitlab.io/dl-poly/) molecular/particle
 dynamics software.
@@ -19,6 +19,10 @@ This plugin is available through PyPI and should be installed using [`pip`](http
 ```
 pip install aiida-dlpoly
 ```
+
+At present due to a outdated dependency this package requires the distutils module which will cause issues
+with certain environments running python >= 3.12. This is being addressed and should be resolved in a future
+release.
 
 ## Requirements 
 
