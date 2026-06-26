@@ -20,7 +20,7 @@ WORKDIR /tmp
 RUN set -x && \ 
     wget -qO- "https://micro.mamba.pm/api/micromamba/linux-64/latest" | tar -xvj bin/micromamba && \
     ./bin/micromamba install --root-prefix="${CONDA_DIR}" --prefix="${CONDA_DIR}" --yes \
-    "python=3.12" "pyscf" "aiida-core" "mamba" "conda" "pytest" "pytest-cov"  && \ 
+    "python=3.12" "aiida-core" "mamba" "conda" "pytest" "pytest-cov"  && \ 
     rm -rf /tmp/bin/ && \ 
     mamba clean --all -f -y 
 
