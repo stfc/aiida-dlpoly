@@ -8,6 +8,8 @@ from aiida.engine import CalcJob, CalcJobProcessSpec
 from aiida.orm import ArrayData, Dict, SinglefileData, StructureData
 from dlpoly.new_control import NewControl
 
+from aiida_dlpoly.utils import structuredata_to_config
+
 
 class DLPOLYCalculation(CalcJob):
     """AiiDA calculation plugin for running molecular dynamics with DL_POLY."""
@@ -154,7 +156,7 @@ class DLPOLYCalculation(CalcJob):
                 )
             )
         else:
-            config_str = self.write_config_file()
+            config_str = structuredata_to_config(self.inputs.configuration)
             with folder.open("CONFIG", "w") as f:
                 f.write(config_str)
 
@@ -168,9 +170,3 @@ class DLPOLYCalculation(CalcJob):
             tmp.seek(0)
             return tmp.read()
         # return control_str
-
-    def write_config_file(self) -> str:
-        """Write a formatted CONFIG file from an AiiDA StructureData node."""
-        # config_str = ""
-        return ""
-        # return config_str

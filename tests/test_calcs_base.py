@@ -1,8 +1,10 @@
 """Test running the base DL_POLY CalcJob."""
 
 from aiida.engine import run
+from aiida.orm import StructureData
 
 from aiida_dlpoly.calculations.base import DLPOLYCalculation
+from aiida_dlpoly.utils import config_to_structuredata
 
 
 def test_argon_simulation(generate_inputs):
@@ -63,6 +65,22 @@ def test_control_dict_input(generate_inputs):
     return
 
 
-def test_config_as_structuredata(generate_inputs):
+def test_config_as_structuredata(generate_inputs, get_data_filepath):
     """Test the ability to use AiiDA StructureData as CONFIG inputs."""
-    generate_inputs()
+    inputs = generate_inputs()
+    inputs["configuration"] = config_to_structuredata(get_data_filepath / "CONFIG")
+    assert isinstance(inputs["configuration"], StructureData)
+
+    results, node = run.get_node(DLPOLYCalculation, **inputs)
+
+    assert node.is_finished_ok, "CalcJob failed."
+
+    assert "OUTPUT" in results["retrieved"].list_object_names()
+
+    statis = results.get("statistics")
+    assert len(statis.get_array("step")) == 51, "Incorrect length of statis arrays."
+
+    assert len(statis.get_arraynames()) == 40, (
+        "Incorrect number of entries in statis labels."
+    )
+    return
