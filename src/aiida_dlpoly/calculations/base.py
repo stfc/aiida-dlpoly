@@ -67,6 +67,24 @@ class DLPOLYCalculation(CalcJob):
             required=True,
             help="Statistics collected throughout the simulation.",
         )
+        spec.output(
+            "revive_configuration",
+            valid_type=SinglefileData,
+            required=True,
+            help="The final configuration generated to enable simulation restart.",
+        )
+        spec.output(
+            "rdf",
+            valid_type=SinglefileData,
+            required=False,
+            help="Radial Distribution Function data file produced by DL_POLY.",
+        )
+        spec.output(
+            "msd",
+            valid_type=SinglefileData,
+            required=False,
+            help="Mean Squared Displacement data file produced by DL_POLY.",
+        )
 
         ## Metadata
         spec.inputs["metadata"]["options"]["resources"].default = {
@@ -123,7 +141,7 @@ class DLPOLYCalculation(CalcJob):
         calc_info.codes_info = [
             code_info,
         ]
-        calc_info.retrieve_temporary_list = ["STATIS"]
+        calc_info.retrieve_temporary_list = ["STATIS", "REVCON"]
         calc_info.provenance_exclude_list = []
         calc_info.retrieve_list = ["OUTPUT"]
 

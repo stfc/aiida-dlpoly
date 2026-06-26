@@ -1,6 +1,8 @@
 """Utility functions for the AiiDA DL_POLY plugin."""
 
-from aiida.orm import StructureData
+from tempfile import NamedTemporaryFile
+
+from aiida.orm import SinglefileData, StructureData
 from dlpoly.config import Config
 
 
@@ -20,6 +22,15 @@ def config_to_structuredata(config_file: str) -> StructureData:
         structure.append_atom(position=atom.pos, symbols=atom.element)
 
     return structure
+
+
+def singlefiledata_config_to_structuredata(
+    config_file: SinglefileData,
+) -> StructureData:
+    """Convert a SinglefileData config node to a StructureData node."""
+    with NamedTemporaryFile(mode="w+", delete=True, suffix="") as tmp:
+        tmp.write(config_file.get_content(mode="r"))
+        return config_to_structuredata(tmp.name)
 
 
 def structuredata_to_config(structure: StructureData) -> str:

@@ -4,7 +4,10 @@ from aiida.engine import run
 from aiida.orm import StructureData
 
 from aiida_dlpoly.calculations.base import DLPOLYCalculation
-from aiida_dlpoly.utils import config_to_structuredata
+from aiida_dlpoly.utils import (
+    config_to_structuredata,
+    singlefiledata_config_to_structuredata,
+)
 
 
 def test_argon_simulation(generate_inputs):
@@ -22,6 +25,10 @@ def test_argon_simulation(generate_inputs):
     assert len(statis.get_arraynames()) == 40, (
         "Incorrect number of entries in statis labels."
     )
+
+    revcon = singlefiledata_config_to_structuredata(results["revive_configuration"])
+    assert len(revcon.sites) == 100
+    assert len(revcon.kinds) == 1
 
     return
 

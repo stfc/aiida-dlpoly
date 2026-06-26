@@ -33,6 +33,13 @@ class DLPOLYParser(Parser):
                 ),
             )
 
+        revcon_path = os.path.join(retrieved_tmp_path, "REVCON")
+        with open(revcon_path, "rb") as f:
+            self.out(
+                "revive_configuration",
+                SinglefileData(file=f, filename="REVCON", label="DL_POLY REVCON file."),
+            )
+
         statis_path = os.path.join(retrieved_tmp_path, "STATIS")
         if os.path.exists(statis_path):
             self.parse_statis(statis_path)
