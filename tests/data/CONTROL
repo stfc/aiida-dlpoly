@@ -19,3 +19,7 @@ time_close  100.0 s
 timestep  0.001 ps
 rescale_frequency  5 steps
 
+rdf_calculate on
+rdf_frequency 1000 steps
+msd_calculate on 
+msd_frequency 1000 steps

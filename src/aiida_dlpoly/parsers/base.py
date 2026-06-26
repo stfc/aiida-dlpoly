@@ -51,6 +51,25 @@ class DLPOLYParser(Parser):
         else:
             return self.exit_codes.ERROR_STATIS_NOT_FOUND
 
+        rdf_path = os.path.join(retrieved_tmp_path, "RDFDAT")
+        if os.path.exists(rdf_path):
+            with open(rdf_path, "rb") as f:
+                self.out(
+                    "rdf",
+                    SinglefileData(
+                        file=f, filename="RDFDAT", label="DL_POLY RDF data file."
+                    ),
+                )
+        msd_path = os.path.join(retrieved_tmp_path, "MSDDAT")
+        if os.path.exists(msd_path):
+            with open(msd_path, "rb") as f:
+                self.out(
+                    "msd",
+                    SinglefileData(
+                        file=f, filename="MSDDAT", label="DL_POLY MSD data file."
+                    ),
+                )
+
         return ExitCode(0)
 
     def parse_statis(self, path: str) -> None:

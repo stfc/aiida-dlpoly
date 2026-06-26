@@ -30,6 +30,9 @@ def test_argon_simulation(generate_inputs):
     assert len(revcon.sites) == 100
     assert len(revcon.kinds) == 1
 
+    assert results.get("rdf", None)
+    assert results.get("msd", None)
+
     return
 
 
