@@ -1,0 +1,87 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+version = "0.1.13"
+name = "aiida-dlpoly"
+description = "AiiDA workflow plugin for the DL_POLY molecular dynamics software package"
+authors = [
+    { name = "Dr. Benjamin T. Speake", email = "benjamin.speake@stfc.ac.uk" },
+]
+dependencies = ["aiida-core >= 2.5"]
+readme = "README.md"
+license = { file = "LICENSE" }
+keywords = ["aiida", "workflows", "dlpoly", "dynamics"]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Framework :: AiiDA",
+    "Development Status :: 5 - Production/Stable",
+]
+requires-python = ">=3.10"
+
+[project.urls]
+Source = "https://github.com/stfc/aiida-dlpoly"
+
+[project.entry-points."aiida.calculations"]
+
+
+[project.entry-points."aiida.parsers"]
+
+
+[project.entry-points."aiida.workflows"]
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.optional-dependencies]
+dev = [
+    "aiida-core>=2.6", # Required to support aiida.tools.pytest_fixtures 
+    "pytest>=8.0",
+    "pytest-cov>=6.0",
+    "ruff>=0.11.0",
+    "pre-commit",
+]
+docs = ["sphinx>=8.0.2", "piccolo-theme>=0.14.0", "sphinx-toolbox", "numpydoc"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+indent-width = 4
+exclude = ["conf.py"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/conftest.py" = ["B008"]
+
+[tool.ruff.lint]
+select = [
+    # flake8-bugbear
+    "B",
+    # pylint
+    "C",
+    "R",
+    # pydocstyle
+    "D",
+    # pycodestyle
+    "E",
+    "W",
+    # Pyflakes
+    "F",
+    "FA",
+    # isort
+    "I",
+    # pep8-naming
+    "N",
+    # pyupgrade
+    "UP",
+]
+ignore = ["C901"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.pylint]
+max-args = 10
