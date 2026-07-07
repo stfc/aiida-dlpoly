@@ -119,6 +119,16 @@ class DLPOLYCalculation(CalcJob):
             "ERROR_REVCON_NOT_FOUND",
             message="Unable to find the expected REVCON file.",
         )
+        spec.exit_code(
+            304,
+            "ERROR_RDFDAT_NOT_FOUND",
+            message="Unable to find the expected RDF data file.",
+        )
+        spec.exit_code(
+            305,
+            "ERROR_HISTORY_NOT_FOUND",
+            message="Unable to find the expected trajectory file.",
+        )
 
     def prepare_for_submission(self, folder: Folder) -> CalcInfo:
         """

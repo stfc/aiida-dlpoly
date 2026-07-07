@@ -18,8 +18,10 @@ class DLPOLYParser(Parser):
         if not retrieved_tmp_path:
             return self.exit_codes.ERROR_OUTPUT_NOT_FOUND
 
-        if "OUTPUT" not in self.retrieved.list_object_names():
-            return self.exit_codes.ERROR_OUTPUT_NOT_FOUND
+        if isinstance(self.node.inputs.control, SinglefileData):
+            control = control_to_dict(self.node.inputs.control)
+        else:
+            control = self.node.inputs.control.get_dict()
 
         output_path = os.path.join(retrieved_tmp_path, "OUTPUT")
         if os.path.exists(output_path):
@@ -54,24 +56,18 @@ class DLPOLYParser(Parser):
         else:
             return self.exit_codes.ERROR_STATIS_NOT_FOUND
 
-        rdf_path = os.path.join(retrieved_tmp_path, "RDFDAT")
-        if os.path.exists(rdf_path):
-            with open(rdf_path, "rb") as f:
-                self.out(
-                    "rdf",
-                    SinglefileData(
-                        file=f, filename="RDFDAT", label="DL_POLY RDF data file."
-                    ),
-                )
-        # msd_path = os.path.join(retrieved_tmp_path, "MSDDAT")
-        # if os.path.exists(msd_path):
-        #     with open(msd_path, "rb") as f:
-        #         self.out(
-        #             "msd",
-        #             SinglefileData(
-        #                 file=f, filename="MSDDAT", label="DL_POLY MSD data file."
-        #             ),
-        #         )
+        if control.get("rdf_calculate", "off").lower() == "on":
+            rdf_path = os.path.join(retrieved_tmp_path, "RDFDAT")
+            if os.path.exists(rdf_path):
+                with open(rdf_path, "rb") as f:
+                    self.out(
+                        "rdf",
+                        SinglefileData(
+                            file=f, filename="RDFDAT", label="DL_POLY RDF data file."
+                        ),
+                    )
+            else:
+                return self.exit_codes.ERROR_RDFDAT_NOT_FOUND
 
         return ExitCode(0)
 
