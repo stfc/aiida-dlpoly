@@ -6,7 +6,7 @@ from aiida.engine import ExitCode
 from aiida.orm import ArrayData, SinglefileData
 from aiida.parsers.parser import Parser
 
-from aiida_dlpoly.utils import DLPStatis
+from aiida_dlpoly.utils import DLPStatis, control_to_dict
 
 
 class DLPOLYParser(Parser):
@@ -73,7 +73,11 @@ class DLPOLYParser(Parser):
 
     def parse_statis(self, path: str) -> None:
         """Parse the STATIS file into an ArrayData node."""
-        statis = DLPStatis(path)
+        if isinstance(self.node.inputs.control, SinglefileData):
+            control = control_to_dict(self.node.inputs.control)
+        else:
+            control = self.node.inputs.control.get_dict()
+        statis = DLPStatis(path, control)
 
         array = ArrayData(label="DLPOLY Statistics Output")
         for i, label in enumerate(statis.labels):

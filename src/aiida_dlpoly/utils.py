@@ -16,7 +16,7 @@ class DLPStatis:
     https://gitlab.com/ccp5/dlpoly-py.
     """
 
-    def __init__(self, file: str | None = None):
+    def __init__(self, file: str | None, control: dict | None = None):
         """
         DLPStatis constructor.
 
@@ -28,9 +28,9 @@ class DLPStatis:
         self.labels = []
         self.data = numpy.array([])
         if file is not None:
-            self.parse(file)
+            self.parse(file, control)
 
-    def parse(self, file: str) -> None:
+    def parse(self, file: str, control: dict | None = None) -> None:
         """Parse the statistics dictionary from a STATIS file."""
         with open(file) as f:
             yaml_key = f.readline().split()[0]
@@ -46,16 +46,20 @@ class DLPStatis:
                 _, _, data = f.read().split("\n", 2)
                 data = numpy.array(data.split(), dtype=float)
                 columns = int(data[2]) + 3
-                rows = self.data.size // columns
+                rows = data.size // columns
                 self.data = data[: rows * columns]
                 self.data = self.data.reshape((rows, columns), copy=False)
                 self.data = numpy.delete(self.data, 2, axis=1)
             self.labels = self.generate_labels()
+            if control is not None:
+                self.add_additional_labels(control)
 
     @staticmethod
     def generate_labels() -> list[str]:
         """Generate the default labels when reading a text formatted STATIS file."""
         return [
+            "step",
+            "Elapsed Simulation Time",
             "Total Extended System Energy",
             "System Temperature",
             "Configurational Energy",
@@ -63,7 +67,7 @@ class DLPStatis:
             "Electrostatic Energy",
             "Chemical Bond Energy",
             "Valence Angle And 3-Body Potential Energy",
-            "Dihedral, Inversion, And 4-Body Potential Energy",
+            "Dihedral Inversion And 4-Body Potential Energy",
             "Tethering Energy",
             "Enthalpy (Total Energy + Pv)",
             "Rotational Temperature",
@@ -94,6 +98,35 @@ class DLPStatis:
             "stress zy",
             "stress zz",
         ]
+
+    def add_additional_labels(self, control: dict) -> None:
+        """Add additional optional entries to the statistics based on control inputs."""
+        if control.get("ensemble_method", "").lower() == "dpd":
+            components = ["xx", "xy", "xz", "yx", "yy", "yz", "zx", "zy", "zz"]
+            for component in components:
+                self.labels.append(f"conservative stress {component}")
+            for component in components:
+                self.labels.append(f"dissipative stress {component}")
+            for component in components:
+                self.labels.append(f"random stress {component}")
+            for component in components:
+                self.labels.append(f"kinetic stress {component}")
+        if control.get("ensemble", "").lower() in ("nst", "npt"):
+            num_atom_types = self.data.shape[1] - len(self.labels) - 10
+            for i in range(num_atom_types):
+                self.labels.append(f"amsd atom {i}")
+            for component in ("x", "y", "z"):
+                self.labels.append(f"cell a_{component}")
+            for component in ("x", "y", "z"):
+                self.labels.append(f"cell b_{component}")
+            for component in ("x", "y", "z"):
+                self.labels.append(f"cell c_{component}")
+            self.labels.append("PV")
+        else:
+            num_atom_types = self.data.shape[1] - len(self.labels)
+            for i in range(num_atom_types):
+                self.labels.append(f"amsd atom {i}")
+        return
 
 
 def config_to_structuredata(config_file: str) -> StructureData:
@@ -164,11 +197,14 @@ def structuredata_to_config(structure: StructureData) -> str:
     return config_str
 
 
-def control_to_dict(control: str | Path) -> dict:
+def control_to_dict(control: str | Path | SinglefileData) -> dict:
     """Extract all parameters in a CONTROL file into a dictionary."""
     control_dict = {}
-    with open(control) as f:
-        lines = f.readlines()
+    if isinstance(control, SinglefileData):
+        lines = control.get_content("r")
+    else:
+        with open(control) as f:
+            lines = f.readlines()
 
     for line in lines:
         line = line.split("#")[0]

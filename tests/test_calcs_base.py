@@ -72,6 +72,8 @@ def test_control_dict_input(generate_inputs):
     assert len(statis.get_array("System_Temperature")) == 201, (
         "Incorrect length of statis arrays."
     )
+    assert len(statis.get_array("step")) == 201, "Incorrect length of statis arrays."
+
     assert len(statis.get_array("Configurational_Energy")) == 201, (
         "Incorrect length of statis arrays."
     )
