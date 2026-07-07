@@ -93,7 +93,7 @@ def test_control_dict_input(generate_inputs):
 def test_config_as_structuredata(generate_inputs, get_data_filepath):
     """Test the ability to use AiiDA StructureData as CONFIG inputs."""
     inputs = generate_inputs()
-    inputs["configuration"] = config_to_structuredata(get_data_filepath / "CONFIG")
+    inputs["configuration"] = config_to_structuredata(get_data_filepath / "Ar.config")
     assert isinstance(inputs["configuration"], StructureData)
 
     results, node = run.get_node(DLPOLYCalculation, **inputs)
