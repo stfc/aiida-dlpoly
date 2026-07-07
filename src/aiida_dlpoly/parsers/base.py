@@ -59,15 +59,15 @@ class DLPOLYParser(Parser):
                         file=f, filename="RDFDAT", label="DL_POLY RDF data file."
                     ),
                 )
-        msd_path = os.path.join(retrieved_tmp_path, "MSDDAT")
-        if os.path.exists(msd_path):
-            with open(msd_path, "rb") as f:
-                self.out(
-                    "msd",
-                    SinglefileData(
-                        file=f, filename="MSDDAT", label="DL_POLY MSD data file."
-                    ),
-                )
+        # msd_path = os.path.join(retrieved_tmp_path, "MSDDAT")
+        # if os.path.exists(msd_path):
+        #     with open(msd_path, "rb") as f:
+        #         self.out(
+        #             "msd",
+        #             SinglefileData(
+        #                 file=f, filename="MSDDAT", label="DL_POLY MSD data file."
+        #             ),
+        #         )
 
         return ExitCode(0)
 
