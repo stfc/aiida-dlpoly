@@ -16,9 +16,6 @@ def test_argon_simulation(generate_inputs):
     results, node = run.get_node(DLPOLYCalculation, **inputs)
     assert node.is_finished_ok, "CalcJob failed."
 
-    with open("tmp.out", "w") as f:
-        f.write(results["retrieved"].get_object_content("OUTPUT"))
-
     statis = results.get("statistics")
 
     assert len(statis.get_arraynames()) == 40, (
@@ -98,9 +95,15 @@ def test_config_as_structuredata(generate_inputs, get_data_filepath):
     assert "OUTPUT" in results["retrieved"].list_object_names()
 
     statis = results.get("statistics")
-    assert len(statis.get_array("step")) == 51, "Incorrect length of statis arrays."
+    assert len(statis.get_array("step")) == 201, "Incorrect length of statis arrays."
 
     assert len(statis.get_arraynames()) == 40, (
         "Incorrect number of entries in statis labels."
     )
+
+    assert statis.get_array("step")[-1] == 2000
+
+    assert abs(statis.get_array("System_Temperature")[-1] - 82.474323) < 1e-3
+
+    assert abs(statis.get_array("Total_Extended_System_Energy")[-1] - -421.63999) < 1e-3
     return
