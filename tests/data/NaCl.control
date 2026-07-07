@@ -24,3 +24,8 @@ record_equilibration ON
 timestep  0.001 ps
 pressure_hydrostatic  0.001 katm
 restart rescale
+
+traj_calculate ON
+traj_start 0.0 steps
+traj_interval 5.0 steps
+traj_key pos-vel

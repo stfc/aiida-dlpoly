@@ -143,4 +143,17 @@ def test_nacl_simulation(generate_inputs):
     assert len(revcon.sites) == 27000
     assert len(revcon.kinds) == 2
 
+    history = results.get("history", False)
+    assert history, "No history node found for NaCl simulation."
+    assert history.numsteps == 5, "Incorrect number of steps in TrajectoryData node."
+    assert history.numsites == 27000, (
+        "Incorrect number of atoms in TrajectoryData node."
+    )
+    assert history.get_positions().shape == (5, 27000, 3)
+    assert history.get_velocities().shape == (5, 27000, 3)
+    assert history.get_times().shape == (5,)
+    assert history.get_stepids().shape == (5,)
+    assert history.get_cells().shape == (5, 3, 3)
+    assert len(history.symbols) == 27000
+
     return

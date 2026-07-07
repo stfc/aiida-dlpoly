@@ -8,7 +8,7 @@ from typing import Any
 from aiida.common import CalcInfo, CodeInfo
 from aiida.common.folders import Folder
 from aiida.engine import CalcJob, CalcJobProcessSpec
-from aiida.orm import ArrayData, Dict, SinglefileData, StructureData
+from aiida.orm import ArrayData, Dict, SinglefileData, StructureData, TrajectoryData
 
 from aiida_dlpoly.utils import control_to_dict, structuredata_to_config
 
@@ -82,10 +82,10 @@ class DLPOLYCalculation(CalcJob):
             help="Radial Distribution Function data file produced by DL_POLY.",
         )
         spec.output(
-            "msd",
-            valid_type=SinglefileData,
+            "history",
+            valid_type=TrajectoryData,
             required=False,
-            help="Mean Squared Displacement data file produced by DL_POLY.",
+            help="The DL_POLY simulation trajectory.",
         )
 
         ## Metadata
