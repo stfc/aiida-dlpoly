@@ -20,11 +20,16 @@ def test_argon_simulation(generate_inputs):
         f.write(results["retrieved"].get_object_content("OUTPUT"))
 
     statis = results.get("statistics")
-    assert len(statis.get_array("step")) == 51
 
     assert len(statis.get_arraynames()) == 40, (
         "Incorrect number of entries in statis labels."
     )
+    assert len(statis.get_array("step")) == 201, "Incorrect length of statis arrays."
+    assert statis.get_array("step")[-1] == 2000
+
+    assert abs(statis.get_array("System_Temperature")[-1] - 82.474323) < 1e-3
+
+    assert abs(statis.get_array("Total_Extended_System_Energy")[-1] - -421.63999) < 1e-3
 
     revcon = singlefiledata_config_to_structuredata(results["revive_configuration"])
     assert len(revcon.sites) == 100
@@ -45,18 +50,18 @@ def test_control_dict_input(generate_inputs):
         "temperature": (85.0, "K"),
         "initial_minimum_separation": (0.0, "ang"),
         "coul_method": "OFF",
-        "print_frequency": (1000, "steps"),
-        "stats_frequency": (1000, "steps"),
-        "stack_size": (5000, "steps"),
+        "print_frequency": (100, "steps"),
+        "stats_frequency": (10, "steps"),
         "padding": (0.2, "ang"),
         "cutoff": (7.5, "ang"),
         "ensemble": "nve",
-        "time_run": (50000, "steps"),
-        "time_equilibration": (0, "steps"),
+        "time_run": (2000, "steps"),
+        "time_equilibration": (1000, "steps"),
         "time_job": (3000.0, "s"),
         "time_close": (100.0, "s"),
         "timestep": (0.001, "ps"),
         "rescale_frequency": (5, "steps"),
+        "random_seed": (2011, 2021, 2022),
     }
 
     results, node = run.get_node(DLPOLYCalculation, **inputs)
@@ -66,7 +71,12 @@ def test_control_dict_input(generate_inputs):
     assert "OUTPUT" in results["retrieved"].list_object_names()
 
     statis = results.get("statistics")
-    assert len(statis.get_array("step")) == 51, "Incorrect length of statis arrays."
+    assert len(statis.get_array("step")) == 201, "Incorrect length of statis arrays."
+    assert statis.get_array("step")[-1] == 2000
+
+    assert abs(statis.get_array("System_Temperature")[-1] - 82.474323) < 1e-3
+
+    assert abs(statis.get_array("Total_Extended_System_Energy")[-1] - -421.63999) < 1e-3
 
     assert len(statis.get_arraynames()) == 40, (
         "Incorrect number of entries in statis labels."
