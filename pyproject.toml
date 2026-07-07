@@ -9,7 +9,7 @@ description = "AiiDA workflow plugin for the DL_POLY molecular dynamics software
 authors = [
     { name = "Dr. Benjamin T. Speake", email = "benjamin.speake@stfc.ac.uk" },
 ]
-dependencies = ["aiida-core>=2.5", "numpy>=2.0"]
+dependencies = ["aiida-core>=2.5", "numpy>=2.0", "ruamel"]
 readme = "README.md"
 license = { file = "LICENSE" }
 keywords = ["aiida", "workflows", "dlpoly", "dynamics"]
