@@ -21,16 +21,20 @@ class DLPOLYParser(Parser):
         if "OUTPUT" not in self.retrieved.list_object_names():
             return self.exit_codes.ERROR_OUTPUT_NOT_FOUND
 
-        with self.retrieved.open("OUTPUT", "rb") as f:
-            self.out(
-                "output",
-                SinglefileData(
-                    file=f,
-                    filename="OUTPUT",
-                    label="DL_POLY OUTPUT File",
-                    description=f"DL_POLY output from process: {self.node.pk}",
-                ),
-            )
+        output_path = os.path.join(retrieved_tmp_path, "OUTPUT")
+        if os.path.exists(output_path):
+            with open(output_path, "rb") as f:
+                self.out(
+                    "output",
+                    SinglefileData(
+                        file=f,
+                        filename="OUTPUT",
+                        label="DL_POLY OUTPUT File",
+                        description=f"DL_POLY output from process: {self.node.pk}",
+                    ),
+                )
+        else:
+            return self.exit_codes.ERROR_OUTPUT_NOT_FOUND
 
         revcon_path = os.path.join(retrieved_tmp_path, "REVCON")
         if os.path.exists(revcon_path):

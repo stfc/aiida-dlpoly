@@ -156,9 +156,15 @@ class DLPOLYCalculation(CalcJob):
         calc_info.codes_info = [
             code_info,
         ]
-        calc_info.retrieve_temporary_list = ["STATIS", "REVCON", "RDFDAT", "MSDDAT"]
+        calc_info.retrieve_temporary_list = [
+            "OUTPUT",
+            "STATIS",
+            "REVCON",
+            "RDFDAT",
+            "HISTORY",
+        ]
         calc_info.provenance_exclude_list = []
-        calc_info.retrieve_list = ["OUTPUT"]
+        calc_info.retrieve_list = []
 
         calc_info.local_copy_list = [
             (
