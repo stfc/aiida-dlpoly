@@ -115,3 +115,32 @@ def test_config_as_structuredata(generate_inputs, get_data_filepath):
 
     assert abs(statis.get_array("Total_Extended_System_Energy")[-1] - -421.63999) < 1e-3
     return
+
+
+def test_nacl_simulation(generate_inputs):
+    """Based Argon MD simulation."""
+    inputs = generate_inputs("NaCl.config", "NaCl.control", "NaCl.field")
+    results, node = run.get_node(DLPOLYCalculation, **inputs)
+    assert node.is_finished_ok, "CalcJob failed."
+
+    statis = results.get("statistics")
+
+    assert len(statis.get_arraynames()) == 51, (
+        "Incorrect number of entries in statis labels."
+    )
+    assert len(statis.get_array("step")) == 11, "Incorrect length of statis arrays."
+    assert statis.get_array("step")[-1] == 20
+
+    assert abs(statis.get_array("System_Temperature")[-1] - 562.7051) < 1e-3, (
+        "Incorrect final temperature for NaCl NPT simulation."
+    )
+
+    assert (
+        abs(statis.get_array("Total_Extended_System_Energy")[-1] - -962641000.0) < 1e-3
+    ), "Incorrect final system energy for NaCl NPT simulation."
+
+    revcon = singlefiledata_config_to_structuredata(results["revive_configuration"])
+    assert len(revcon.sites) == 27000
+    assert len(revcon.kinds) == 2
+
+    return
