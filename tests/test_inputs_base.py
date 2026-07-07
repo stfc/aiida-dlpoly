@@ -8,6 +8,6 @@ def test_base_defaults(generate_calcjob):
     tmp_path, calc_info = generate_calcjob(DLPOLYCalculation)
 
     assert calc_info.retrieve_list == ["OUTPUT"]
-    assert calc_info.codes_info[0].cmdline_params == ["-c", "CONTROL"]
+    assert calc_info.codes_info[0].cmdline_params == ["-c", "Ar.control"]
 
     return

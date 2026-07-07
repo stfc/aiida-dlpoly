@@ -10,7 +10,7 @@ from aiida.common.folders import Folder
 from aiida.engine import CalcJob, CalcJobProcessSpec
 from aiida.orm import ArrayData, Dict, SinglefileData, StructureData
 
-from aiida_dlpoly.utils import structuredata_to_config
+from aiida_dlpoly.utils import control_to_dict, structuredata_to_config
 
 
 class DLPOLYCalculation(CalcJob):
@@ -135,6 +135,14 @@ class DLPOLYCalculation(CalcJob):
         calcInfo : CalcInfo
             An `aiida.common.CalcInfo` instance.
         """
+        if isinstance(self.inputs.control, SinglefileData):
+            control = control_to_dict(self.inputs.control)
+        else:
+            control = self.inputs.control.get_dict()
+
+        io_file_field: str = control.get("io_file_field", "FIELD")
+        io_file_config: str = control.get("io_file_config", "CONFIG")
+
         code_info = CodeInfo()
         code_info.code_uuid = self.inputs.code.uuid
         if isinstance(self.inputs.control, SinglefileData):
@@ -156,7 +164,7 @@ class DLPOLYCalculation(CalcJob):
             (
                 self.inputs.field.uuid,
                 self.inputs.field.filename,
-                self.inputs.field.filename,
+                io_file_field,
             )
         ]
         if isinstance(self.inputs.control, SinglefileData):
@@ -173,12 +181,12 @@ class DLPOLYCalculation(CalcJob):
                 (
                     self.inputs.configuration.uuid,
                     self.inputs.configuration.filename,
-                    self.inputs.configuration.filename,
+                    io_file_config,
                 )
             )
         else:
             config_str = structuredata_to_config(self.inputs.configuration)
-            with folder.open("CONFIG", "w") as f:
+            with folder.open(io_file_config, "w") as f:
                 f.write(config_str)
 
         return calc_info
