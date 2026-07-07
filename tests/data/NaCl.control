@@ -1,0 +1,26 @@
+title SODIUM CHLORIDE WITH (27000 IONS)
+
+io_file_config NaCl.config
+io_file_field NaCl.field
+io_file_statis STATIS
+io_file_revive REVIVE
+io_file_revcon REVCON
+temperature  500.0 K
+print_frequency  2.0 steps
+stats_frequency  2.0 steps
+vdw_cutoff  12.0 ang
+cutoff  12.0 ang
+coul_method spme
+spme_precision 1e-06
+ensemble npt
+ensemble_method langevin
+ensemble_thermostat_friction  2.0 ps^-1
+ensemble_barostat_friction  1.0 ps^-1
+time_run  20.0 steps
+time_equilibration  10.0 steps
+time_job  100.0 s
+time_close  10.0 s
+record_equilibration ON
+timestep  0.001 ps
+pressure_hydrostatic  0.001 katm
+restart rescale

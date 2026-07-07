@@ -1,13 +1,12 @@
 """Defines the base calculation parser for the DL_POLY AiiDA plugin."""
 
 import os
-from tempfile import NamedTemporaryFile
 
 from aiida.engine import ExitCode
 from aiida.orm import ArrayData, SinglefileData
 from aiida.parsers.parser import Parser
-from dlpoly.new_control import NewControl
-from dlpoly.statis import Statis
+
+from aiida_dlpoly.utils import DLPStatis, control_to_dict
 
 
 class DLPOLYParser(Parser):
@@ -60,27 +59,25 @@ class DLPOLYParser(Parser):
                         file=f, filename="RDFDAT", label="DL_POLY RDF data file."
                     ),
                 )
-        msd_path = os.path.join(retrieved_tmp_path, "MSDDAT")
-        if os.path.exists(msd_path):
-            with open(msd_path, "rb") as f:
-                self.out(
-                    "msd",
-                    SinglefileData(
-                        file=f, filename="MSDDAT", label="DL_POLY MSD data file."
-                    ),
-                )
+        # msd_path = os.path.join(retrieved_tmp_path, "MSDDAT")
+        # if os.path.exists(msd_path):
+        #     with open(msd_path, "rb") as f:
+        #         self.out(
+        #             "msd",
+        #             SinglefileData(
+        #                 file=f, filename="MSDDAT", label="DL_POLY MSD data file."
+        #             ),
+        #         )
 
         return ExitCode(0)
 
     def parse_statis(self, path: str) -> None:
         """Parse the STATIS file into an ArrayData node."""
         if isinstance(self.node.inputs.control, SinglefileData):
-            with NamedTemporaryFile(mode="w", delete=True, suffix="") as control_tmp:
-                control_tmp.write(self.node.inputs.control.get_content(mode="r"))
-                control = NewControl(control_tmp.name)
+            control = control_to_dict(self.node.inputs.control)
         else:
-            control = NewControl.from_dict(self.node.inputs.control.get_dict())
-        statis = Statis(path, control)
+            control = self.node.inputs.control.get_dict()
+        statis = DLPStatis(path, control)
 
         array = ArrayData(label="DLPOLY Statistics Output")
         for i, label in enumerate(statis.labels):

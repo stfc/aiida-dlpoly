@@ -1,0 +1,27 @@
+title Argon System, stress autocorrelation
+
+io_statis_yaml on
+io_file_config Ar.config
+io_file_field Ar.field
+
+temperature  85.0 K
+initial_minimum_separation  0.0 ang
+coul_method OFF
+print_frequency  100 steps
+stats_frequency  10 steps
+
+padding  0.2 ang
+cutoff  7.5 ang
+ensemble nve
+time_run  2000 steps
+time_equilibration  1000 steps
+time_job  3000.0 s
+time_close  100.0 s
+timestep  0.001 ps
+rescale_frequency  5 steps
+random_seed [ 2011 2021 2022 ]
+
+rdf_calculate on
+rdf_frequency 1000 steps
+msd_calculate on 
+msd_frequency 1000 steps
