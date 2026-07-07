@@ -201,7 +201,7 @@ def control_to_dict(control: str | Path | SinglefileData) -> dict:
     """Extract all parameters in a CONTROL file into a dictionary."""
     control_dict = {}
     if isinstance(control, SinglefileData):
-        lines = control.get_content("r")
+        lines = control.get_content("r").split("\n")
     else:
         with open(control) as f:
             lines = f.readlines()
@@ -215,8 +215,10 @@ def control_to_dict(control: str | Path | SinglefileData) -> dict:
         key, *args = line.split()
         if key == "title":
             control_dict[key] = " ".join(args)
-        else:
+        elif len(args) > 1:
             control_dict[key] = [
                 stripped_arg for arg in args if (stripped_arg := arg.strip("[]"))
             ]
+        else:
+            control_dict[key] = args[0]
     return control_dict
