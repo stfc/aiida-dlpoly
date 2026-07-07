@@ -65,7 +65,7 @@ def test_control_dict_input(generate_inputs):
 
     assert node.is_finished_ok, "CalcJob failed."
 
-    assert "OUTPUT" in results["retrieved"].list_object_names()
+    assert results.get("output", False), "Failed to generate output file node."
 
     statis = results.get("statistics")
     assert len(statis.get_array("step")) == 201, "Incorrect length of statis arrays."
@@ -100,7 +100,7 @@ def test_config_as_structuredata(generate_inputs, get_data_filepath):
 
     assert node.is_finished_ok, "CalcJob failed."
 
-    assert "OUTPUT" in results["retrieved"].list_object_names()
+    assert results.get("output", False), "Failed to generate output file node."
 
     statis = results.get("statistics")
     assert len(statis.get_array("step")) == 201, "Incorrect length of statis arrays."
