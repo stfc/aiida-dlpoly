@@ -5,7 +5,7 @@ from aiida_dlpoly.utils import config_to_structuredata
 
 def test_config_to_structuredata(get_data_filepath):
     """Test converting a CONFIG file to a structuredata node."""
-    structure = config_to_structuredata(get_data_filepath / "CONFIG")
+    structure = config_to_structuredata(get_data_filepath / "Ar.config")
 
     assert structure.pbc1
     assert structure.pbc2
