@@ -1,12 +1,14 @@
 """Core DL_POLY simulation calculation module."""
 
-from tempfile import NamedTemporaryFile
+from collections.abc import Sequence
+from functools import singledispatchmethod
+from pathlib import Path
+from typing import Any
 
 from aiida.common import CalcInfo, CodeInfo
 from aiida.common.folders import Folder
 from aiida.engine import CalcJob, CalcJobProcessSpec
 from aiida.orm import ArrayData, Dict, SinglefileData, StructureData
-from dlpoly.new_control import NewControl
 
 from aiida_dlpoly.utils import structuredata_to_config
 
@@ -165,10 +167,6 @@ class DLPOLYCalculation(CalcJob):
                     self.inputs.control.filename,
                 )
             )
-        else:
-            control_str = self.write_control_file()
-            with folder.open("CONTROL", "w") as f:
-                f.write(control_str)
 
         if isinstance(self.inputs.configuration, SinglefileData):
             calc_info.local_copy_list.append(
@@ -187,9 +185,122 @@ class DLPOLYCalculation(CalcJob):
 
     def write_control_file(self) -> str:
         """Write a formatted CONTROL file from an input dictionary."""
-        control = NewControl.from_dict(self.inputs.control.get_dict())
-        with NamedTemporaryFile(mode="w+", delete=True, suffix="") as tmp:
-            control.write(tmp.name)
-            tmp.seek(0)
-            return tmp.read()
-        # return control_str
+        title = self.inputs.control.get("title", "AiiDA DL_POLY simulation.")
+        control_str = f"title {title}\n"
+        for key, item in self.inputs.control.get_dict().items():
+            if key != "title":
+                control_str += f"{key}  {self.format_control_input(item, key)}\n"
+        print("CONTROL FILE")
+        print(control_str)
+        return control_str
+
+    @singledispatchmethod
+    @staticmethod
+    def format_control_input(value: Any, key: str) -> str:
+        """
+        Format a DL_POLY control file input argument.
+
+        Some aspects of the function overloads for this method have been derived from
+        the dlpoly-py python package, see https://gitlab.com/ccp5/dlpoly-py.
+
+        Parameters
+        ----------
+        value : Any
+            The value to be applied to the given key.
+        key : str
+            Key of variable.
+
+        Returns
+        -------
+        str
+            The value correctly formatted for DL_POLY CONTROL file.
+        """
+        return str(value)
+
+    @format_control_input.register
+    @staticmethod
+    def _(value: Sequence, key: str) -> str:
+        """
+        Format tuple/vector of parameters.
+
+        This function formats both vector style inputs and inputs which contain
+        a units key i.e. an input of (10, 'steps'). All numeric inputs to DL_POLY
+        require a unit so must be supplied as a tuple in the form (value, unit).
+
+        Parameters
+        ----------
+        vals : Sequence
+            Vector-like value.
+        key : str
+            Key of variable.
+
+        Returns
+        -------
+        str
+            Formatted `Control` variable.
+        """
+        lvals = None
+        can_be_len_1 = key in (
+            "correlation_observable",
+            "correlation_blocks",
+            "correlation_block_points",
+            "correlation_window",
+            "correlation_update_frequency",
+            "momentum_density",
+        )
+
+        if not can_be_len_1 and isinstance(value[-1], str):
+            lvals, unit = value[:-1], value[-1]
+        else:
+            lvals, unit = value, ""
+
+        if unit == "steps":
+            lvals = list(map(int, lvals))
+
+        out = " ".join(map(str, lvals))
+
+        if len(lvals) > 1 or can_be_len_1:
+            out = f"[{out}]"
+
+        return f"{out} {unit}"
+
+    @format_control_input.register
+    @staticmethod
+    def _(value: bool, key: str) -> str:
+        """
+        Format boolean arguments.
+
+        Parameters
+        ----------
+        vals : bool
+            Boolean value.
+        key : str
+            Key of variable.
+
+        Returns
+        -------
+        str
+            Formatted `Control` variable.
+        """
+        return "ON" if value else "OFF"
+
+    @format_control_input.register(str)
+    @format_control_input.register(Path)
+    @staticmethod
+    def _(value: str | Path, key: str) -> str:
+        """
+        Format string/Path arguments.
+
+        Parameters
+        ----------
+        vals : Union[str, Path]
+            Path or string-like value.
+        key : str
+            Key of variable.
+
+        Returns
+        -------
+        str
+            Formatted `Control` variable.
+        """
+        return str(value)
