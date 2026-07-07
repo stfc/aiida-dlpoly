@@ -48,11 +48,13 @@ def dlpoly_code(aiida_code_installed):
 def generate_inputs(dlpoly_code, get_test_data_file):
     """Return a dictionary of inputs for the ChemShellCalculation."""
 
-    def factory() -> dict:
+    def factory(
+        config: str = "Ar.config", control: str = "Ar.control", field: str = "Ar.field"
+    ) -> dict:
         return {
-            "configuration": get_test_data_file("CONFIG"),
-            "control": get_test_data_file("CONTROL"),
-            "field": get_test_data_file("FIELD"),
+            "configuration": get_test_data_file(config),
+            "control": get_test_data_file(control),
+            "field": get_test_data_file(field),
             "code": dlpoly_code(),
         }
 
