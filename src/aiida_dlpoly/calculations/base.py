@@ -190,8 +190,6 @@ class DLPOLYCalculation(CalcJob):
         for key, item in self.inputs.control.get_dict().items():
             if key != "title":
                 control_str += f"{key}  {self.format_control_input(item, key)}\n"
-        print("CONTROL FILE")
-        print(control_str)
         return control_str
 
     @singledispatchmethod

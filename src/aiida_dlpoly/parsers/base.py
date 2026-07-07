@@ -1,13 +1,12 @@
 """Defines the base calculation parser for the DL_POLY AiiDA plugin."""
 
 import os
-from tempfile import NamedTemporaryFile
 
 from aiida.engine import ExitCode
 from aiida.orm import ArrayData, SinglefileData
 from aiida.parsers.parser import Parser
-from dlpoly.new_control import NewControl
-from dlpoly.statis import Statis
+
+from aiida_dlpoly.utils import DLPStatis
 
 
 class DLPOLYParser(Parser):
@@ -74,13 +73,7 @@ class DLPOLYParser(Parser):
 
     def parse_statis(self, path: str) -> None:
         """Parse the STATIS file into an ArrayData node."""
-        if isinstance(self.node.inputs.control, SinglefileData):
-            with NamedTemporaryFile(mode="w", delete=True, suffix="") as control_tmp:
-                control_tmp.write(self.node.inputs.control.get_content(mode="r"))
-                control = NewControl(control_tmp.name)
-        else:
-            control = NewControl.from_dict(self.node.inputs.control.get_dict())
-        statis = Statis(path, control)
+        statis = DLPStatis(path)
 
         array = ArrayData(label="DLPOLY Statistics Output")
         for i, label in enumerate(statis.labels):

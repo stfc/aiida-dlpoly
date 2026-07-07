@@ -69,6 +69,12 @@ def test_control_dict_input(generate_inputs):
 
     statis = results.get("statistics")
     assert len(statis.get_array("step")) == 201, "Incorrect length of statis arrays."
+    assert len(statis.get_array("System_Temperature")) == 201, (
+        "Incorrect length of statis arrays."
+    )
+    assert len(statis.get_array("Configurational_Energy")) == 201, (
+        "Incorrect length of statis arrays."
+    )
     assert statis.get_array("step")[-1] == 2000
 
     assert abs(statis.get_array("System_Temperature")[-1] - 82.474323) < 1e-3
