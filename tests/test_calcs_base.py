@@ -43,7 +43,7 @@ def test_control_dict_input(generate_inputs):
     inputs = generate_inputs()
     inputs["control"] = {
         "title": "Argon System",
-        "io_statis_yaml": "ON",
+        "io_statis_yaml": "OFF",
         "temperature": (85.0, "K"),
         "initial_minimum_separation": (0.0, "ang"),
         "coul_method": "OFF",
