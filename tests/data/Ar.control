@@ -1,6 +1,8 @@
 title Argon System, stress autocorrelation
 
 io_statis_yaml on
+io_file_config Ar.config
+io_file_field Ar.field
 
 temperature  85.0 K
 initial_minimum_separation  0.0 ang
