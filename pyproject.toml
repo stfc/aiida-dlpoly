@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-version = "0.0.1"
+version = "0.1.0"
 name = "aiida-dlpoly"
 description = "AiiDA workflow plugin for the DL_POLY molecular dynamics software package"
 authors = [
