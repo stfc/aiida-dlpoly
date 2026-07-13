@@ -1,12 +1,11 @@
 [![Release](https://img.shields.io/github/v/release/stfc/aiida-dlpoly)](https://github.com/stfc/aiida-dlpoly/releases)
 [![PyPI](https://img.shields.io/pypi/v/aiida-dlpoly)](https://pypi.org/project/aiida-dlpoly/)
 
-[![Docs status](https://github.com/stfc/aiida-dlpoly/actions/workflows/ci-docs.yml/badge.svg?branch=main)](https://stfc.github.io/aiida-dlpoly/)
+<!-- [![Docs status](https://github.com/stfc/aiida-dlpoly/actions/workflows/ci-docs.yml/badge.svg?branch=main)](https://stfc.github.io/aiida-dlpoly/) -->
 [![Pipeline Status](https://github.com/stfc/aiida-dlpoly/actions/workflows/ci-testing.yml/badge.svg?branch=main)](https://github.com/stfc/aiida-dlpoly/actions)
-[![Coverage Status]( https://coveralls.io/repos/github/stfc/aiida-dlpoly/badge.svg?branch=main)](https://coveralls.io/github/stfc/aiida-dlpoly?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/stfc/aiida-dlpoly/badge.svg?branch=main)](https://coveralls.io/github/stfc/aiida-dlpoly?branch=main)
 
-[![DOI]()]()
-
+[![DOI](https://zenodo.org/badge/1281062894.svg)](https://doi.org/10.5281/zenodo.21337396)
 # aiida-dlpoly
 
 An [AiiDA](https://www.aiida.net) plugin for the [DL_POLY](https://ccp5.gitlab.io/dl-poly/) molecular/particle
@@ -14,7 +13,8 @@ dynamics software.
 
 ## Installation
 
-This plugin is available through PyPI and should be installed using [`pip`](https://pip.pypa.io/en/stable/) python package manager.
+This plugin is available through PyPI and should be installed using [`pip`](https://pip.pypa.io/en/stable/) 
+or an equivalent python package manager.
 
 ```bash
 pip install aiida-dlpoly

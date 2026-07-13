@@ -7,7 +7,10 @@ authors:
     given-names: Benjamin 
     orcid: "https://orcid.org/0000-0002-5690-9470"
 identifiers:
-  - type: doi 
+  - type: doi
+    value: 10.5281/zenodo.21337396
 repository-code: "https://github.com/stfc/aiida-dlpoly"
 abstract: "AiiDA plugin for the DL_POLY molecular dynamics software."
 license: BSD-3-Clause
+version: v0.1.0
+date-released: 2026-07-13
