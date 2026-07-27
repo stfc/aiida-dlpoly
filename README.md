@@ -63,12 +63,12 @@ files is given below.
 
 ```python
 from aiida.engine import run
-from aiida.orm import SinglefileData
+from aiida.orm import SinglefileData, load_code
 from aiida import load_profile
 
 load_profile("username") # Replace with your own AiiDA username
 
-build.load_code("dlpoly").get_builder()
+builder = load_code("dlpoly").get_builder()
 builder.control = SinglefileData(file="/absolute/path/to/CONTROL") # Change these to the absolute paths to input files
 builder.field = SinglefileData(file="/absolute/path/to/FIELD")
 builder.configuration = SinglefileData(file="/absolute/path/to/CONFIG")
@@ -96,12 +96,12 @@ inputs methods is shown below, it assumes an AiiDA *StructureData* node already 
 
 ```python
 from aiida.engine import run
-from aiida.orm import Dict, load_node, SinglefileData
+from aiida.orm import Dict, load_node, SinglefileData, load_code
 from aiida import load_profile
 
 load_profile("username") # Replace with your own AiiDA username
 
-build.load_code("dlpoly").get_builder()
+builder = load_code("dlpoly").get_builder()
 builder.field = SinglefileData(file="/absolute/path/to/FIELD") # Change these to the absolute paths to input file
 builder.configuration = load_node(pk=10) # Replace with the pk of the StructureData node or create a new StructureData node
 builder.control = Dict({
