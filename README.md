@@ -20,10 +20,6 @@ or an equivalent python package manager.
 pip install aiida-dlpoly
 ```
 
-At present due to a outdated dependency this package requires the distutils module which will cause issues
-with certain environments running python >= 3.12. This is being addressed and should be resolved in a future
-release.
-
 ## Requirements
 
 To use this plugin a configured AiiDA profile and computer instance are required, see the
