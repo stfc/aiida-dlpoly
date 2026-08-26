@@ -12,5 +12,5 @@ identifiers:
 repository-code: "https://github.com/stfc/aiida-dlpoly"
 abstract: "AiiDA plugin for the DL_POLY molecular dynamics software."
 license: BSD-3-Clause
-version: v0.1.0
-date-released: 2026-07-13
+version: v0.1.1
+date-released: 2026-08-26
