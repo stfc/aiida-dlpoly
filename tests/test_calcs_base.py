@@ -59,6 +59,7 @@ def test_control_dict_input(generate_inputs):
         "timestep": (0.001, "ps"),
         "rescale_frequency": (5, "steps"),
         "random_seed": (2011, 2021, 2022),
+        "traj_calculate": "off",
     }
 
     results, node = run.get_node(DLPOLYCalculation, **inputs)

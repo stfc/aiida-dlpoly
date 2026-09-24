@@ -57,7 +57,10 @@ class DLPOLYParser(Parser):
         else:
             return self.exit_codes.ERROR_STATIS_NOT_FOUND
 
-        if control.get("rdf_calculate", "off").lower() == "on":
+        rdf_flag = control.get("rdf_calculate", False)
+        if isinstance(rdf_flag, str):
+            rdf_flag = True if rdf_flag.lower() == "on" else False
+        if rdf_flag:
             rdf_path = os.path.join(retrieved_tmp_path, "RDFDAT")
             if os.path.exists(rdf_path):
                 with open(rdf_path, "rb") as f:
@@ -70,7 +73,10 @@ class DLPOLYParser(Parser):
             else:
                 return self.exit_codes.ERROR_RDFDAT_NOT_FOUND
 
-        if control.get("traj_calculate", "off").lower() == "on":
+        traj_flag = control.get("traj_calculate", False)
+        if isinstance(traj_flag, str):
+            traj_flag = True if traj_flag.lower() == "on" else False
+        if traj_flag:
             history_path = os.path.join(retrieved_tmp_path, "HISTORY")
             if os.path.exists(history_path):
                 self._parse_history(history_path)
