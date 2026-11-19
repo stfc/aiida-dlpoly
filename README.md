@@ -32,6 +32,26 @@ same environment automatically exposes `describe_dlpoly_calcjob` and `submit_dlp
 tools. See the [MCP integration](https://stfc.github.io/aiida-dlpoly/mcp.html) docs page
 for the tools' arguments and a worked example.
 
+## Agent Skill
+
+`aiida-dlpoly` ships an [Agent Skill](https://www.anthropic.com/news/skills) describing how
+to set up, submit and troubleshoot DL_POLY calculations with this plugin, for AI assistants
+(such as Claude Code) that support the `SKILL.md` format. Once the package is installed,
+the `aiida-dlpoly` command installs it into your assistant's skills directory:
+
+```bash
+aiida-dlpoly skills install
+```
+
+This copies the skill into `~/.claude/skills/` by default; pass a directory to install
+somewhere else, e.g. a project-local `.claude/skills/`:
+
+```bash
+aiida-dlpoly skills install .claude/skills
+```
+
+See the [Agent Skill](https://stfc.github.io/aiida-dlpoly/skills.html) docs page for details.
+
 ## Requirements
 
 To use this plugin a configured AiiDA profile and computer instance are required, see the

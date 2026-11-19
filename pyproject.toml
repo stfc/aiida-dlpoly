@@ -25,6 +25,9 @@ requires-python = ">=3.10"
 [project.urls]
 Source = "https://github.com/stfc/aiida-dlpoly"
 
+[project.scripts]
+aiida-dlpoly = "aiida_dlpoly.cli:main"
+
 [project.entry-points."aiida.calculations"]
 "dlpoly" = "aiida_dlpoly.calculations.base:DLPOLYCalculation"
 
@@ -38,6 +41,9 @@ dlpoly = "aiida_dlpoly.mcp"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+aiida_dlpoly = ["skills/**/*"]
 
 [project.optional-dependencies]
 mcp = ["aiida-mcp"]
