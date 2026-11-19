@@ -20,6 +20,18 @@ or an equivalent python package manager.
 pip install aiida-dlpoly
 ```
 
+## MCP integration
+
+```bash
+pip install "aiida-dlpoly[mcp]"
+```
+
+pulls in [aiida-mcp](https://github.com/stfc/aiida-mcp) and registers `aiida_dlpoly.mcp`
+under its `aiida_mcp.plugins` entry point group, so any aiida-mcp server running in the
+same environment automatically exposes `describe_dlpoly_calcjob` and `submit_dlpoly_job`
+tools. See the [MCP integration](https://stfc.github.io/aiida-dlpoly/mcp.html) docs page
+for the tools' arguments and a worked example.
+
 ## Requirements
 
 To use this plugin a configured AiiDA profile and computer instance are required, see the

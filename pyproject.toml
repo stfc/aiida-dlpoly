@@ -33,13 +33,16 @@ Source = "https://github.com/stfc/aiida-dlpoly"
 
 [project.entry-points."aiida.workflows"]
 
+[project.entry-points."aiida_mcp.plugins"]
+dlpoly = "aiida_dlpoly.mcp"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [project.optional-dependencies]
+mcp = ["aiida-mcp"]
 dev = [
-    "aiida-core>=2.6", # Required to support aiida.tools.pytest_fixtures 
+    "aiida-core>=2.6", # Required to support aiida.tools.pytest_fixtures
     "pytest>=8.0",
     "pytest-cov>=6.0",
     "ruff>=0.11.0",

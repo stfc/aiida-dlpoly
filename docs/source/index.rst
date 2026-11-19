@@ -17,6 +17,7 @@ Getting started
 
 * :doc:`installation` — install the plugin and configure a DL_POLY code.
 * :doc:`usage` — run simulations and work with the results.
+* :doc:`mcp` — expose DL_POLY as tools on an aiida-mcp server.
 * :doc:`api` — the auto-generated API reference.
 
 .. toctree::
@@ -25,4 +26,5 @@ Getting started
 
    installation
    usage
+   mcp
    api
