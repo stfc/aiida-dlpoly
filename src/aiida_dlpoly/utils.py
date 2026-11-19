@@ -48,7 +48,7 @@ class DLPStatis:
                 columns = int(data[2]) + 3
                 rows = data.size // columns
                 self.data = data[: rows * columns]
-                self.data = self.data.reshape((rows, columns), copy=False)
+                self.data = self.data.reshape((rows, columns))
                 self.data = numpy.delete(self.data, 2, axis=1)
             self.labels = self.generate_labels()
             if control is not None:
